@@ -1,0 +1,30 @@
+ANATOMY OF ELECTRON / NODE / P5  APP
+
+
+in package.json >> "main": "main.js"
+
+in main.js >> mainWindow.loadFile('index.html')   +   preload.js
+
+
+in index.html >> [in body] <script src='./renderer.js'></script>
+
+
+in renderer.js >> load and declare app p5 + sketch  === const sketch = require('./p5/sketch-tng.js');
+
+const app = new p5(sketch);
+
+
+
+
+==========================================================================
+
+package.json 
+	     >> main.js 
+			>> index.html 
+				      >> renderer.js 
+						     >> sketch_tng.js 
+
+
+==========================================================================
+
+
