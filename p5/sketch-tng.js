@@ -24,7 +24,6 @@ var maxFiles = 2
 var ISPLAY = false
 var consline = 0
 var constext = []
-// var constext = ["---", "---", "---", "---", "---", "---", "---", "---"]
 var maxconslines = 9
 
 
@@ -47,8 +46,6 @@ client.on('message', function (topic, message) {
         dastatus = topic.toString() + " " + message.toString()
     }
     // client.end()
-    cons(topic.toString() + " " + message.toString())
-    debagtext = topic.toString() + " " + message.toString()
 })
 
 
@@ -65,17 +62,14 @@ function playVid() {
         }
     })
 
+    // SHUFFLE PLAYERS LIST
     vPlayers = reshuffle(vPlayers);
-    // console.log("but > vPlayers array = " + vPlayers);
-    // cons("but > vPlayers array = " + vPlayers);
 
-    // rezet = true;
 }
 
 ///////////////////////////////
 function cons(datext) {
     if (constext[consline] != datext) {
-
         if (consline > 0) {
             consline--;
         } else {
@@ -83,18 +77,13 @@ function cons(datext) {
             consline = constext.length - 1;
         }
         constext[consline] = datext;
-
     }
 }
 
 
 
 function v_play_next() {
-    // global vPlayers, vSequence, maxFiles, maxSeq, currFile, currSeq
-    // global client1
-    // global explayer, nextplayer
 
-    cons("xcurrSeq: " + str(currSeq) + " xcurrFile: " + str(currFile))
 
     if (currSeq >= 0) {
         explayer = vPlayers[vSequence[currSeq]]
@@ -116,14 +105,14 @@ function v_play_next() {
 
     }
 
-    cons("currSeq: " + str(currSeq) + " currFile: " + str(currFile))
+    debagtext = ("currSeq: " + str(currSeq) + " currFile: " + str(currFile))
 
     // # reshuffle_sequence()
 
     let nextplayer = vPlayers[vSequence[currSeq]]
-    cons("nextplayer: " + nextplayer)
+    debagtext = ("nextplayer: " + nextplayer)
     let nextFile = nextFileName(vSequence[currSeq] + 1, currFile)
-    cons("nextFile: " + nextFile)
+    debagtext = ("nextFile: " + nextFile)
 
     // client1.publish(nextplayer + "/url", nextFile)
     // pyg.filebar(nextplayer + " now playing >> " + nextFile)
@@ -206,17 +195,17 @@ udpPort.on('message', (oscMessage) => {
     switch (oscMessage.address) {
         case '/pos_x':
             posX = Number(oscMessage.args[0]);
-            console.log("posX = " + posX.toString());
+            // console.log("posX = " + String(posX));
             break;
 
 
         case '/pos_y':
             posY = Number(oscMessage.args[0]);
-            console.log("posY = " + posY.toString());
+            // console.log("posY = " + String(posY));
             break;
     }
     console.log(oscMessage);
-    cons(oscMessage);
+    dastatus = ("posX: " + String(posX) + "   " + "posY: " + posY);
 
 });
 
@@ -273,18 +262,33 @@ module.exports = (p) => {
         p.ellipse(p.windowWidth / 2, p.windowHeight / 3, 20, 20);
 
 
-        p.noStroke();
-        p.textSize(12);
-        p.textFont('Helvetica');
-        p.fill(150, 150, 150, 150);
-        p.text("osc posX : " + String(window.posX), p.windowWidth - 120, p.windowHeight - 50);
-        p.text("osc posY : " + String(window.posY), p.windowWidth - 120, p.windowHeight - 24);
+        oscboxdraw();
+
 
         // video play looper    
         // if (playing == false) {
         //     playVid()
         // }
 
+    }
+
+
+    function oscboxdraw() {
+
+        let mytopx = p.windowWidth - 120;
+        let mytopy = 20;
+
+        p.strokeWeight(1);
+        p.stroke(0, 100, 0, 100);
+        p.fill(0, 0, 0, 30);
+        let myrect = p.rect(mytopx, mytopy, 100, 40, 10);
+        console.log("mytopy: " + mytopy);
+        p.noStroke();
+        p.textSize(12);
+        p.textFont('Helvetica');
+        p.fill(150, 150, 150, 150);
+        p.text("osc posX : " + String(posX), mytopx + 10, mytopy + 15);
+        p.text("osc posY : " + String(posY), mytopx + 10, mytopy + 32);
     }
 
     ///////////////////////////////
@@ -360,7 +364,7 @@ module.exports = (p) => {
 
 
     function prezzme() {
-        cons(this);
+        debagtext = (this);
         console.log(this);
         // console.log("prezzato # " + String(iddio));
         debagtext = "prezzato # " + String(Math.random());
